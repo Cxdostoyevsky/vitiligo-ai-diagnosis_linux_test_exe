@@ -145,7 +145,7 @@ def preprocess_and_generate_feature_maps(csv_path, output_dir, num_workers=6):
     temp_feature_map_dir = os.path.join(os.path.dirname(output_dir), "temp_edge_features")
     os.makedirs(temp_feature_map_dir, exist_ok=True)
 
-    df = pd.read_csv(csv_path, sep='\t', engine='python')
+    df = pd.read_csv(csv_path, sep='[,\t]', engine='python')
     configs_by_name = {c['name']: c['params'] for c in PARAMETER_CONFIGS}
     
     # 定义主配置和回退配置

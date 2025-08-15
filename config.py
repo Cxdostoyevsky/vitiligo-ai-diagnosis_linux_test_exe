@@ -36,6 +36,9 @@ MODEL_PATHS = {
 # SigLIP 主干模型路径
 SIGLIP_MODEL_PATH = get_resource_path(os.path.join("model_ckpt", "siglip2-base-patch16-512"))
 
+# --- 新增: LVLM 模型路径 ---
+LVLM_MODEL_PATH = get_resource_path(os.path.join("model_ckpt", "med_vl"))
+
 # 处理器路径（与模型路径相同）
 SIGLIP_PROCESSOR_PATH = SIGLIP_MODEL_PATH
 
@@ -46,6 +49,10 @@ IMAGE_ROOT_DIR = "/hdd/chenxi/bzt/uploads_images"
 PROBABILITIES_CSV = os.path.join("results", "probabilities.csv")
 PREDICTIONS_CSV = os.path.join("results", "predictions.csv")
 VOTE_CSV = os.path.join("results", "vote_results.csv")
+
+# --- 新增: LVLM 结果文件路径 ---
+LVLM_PROBABILITIES_CSV = os.path.join("results", "probabilities_lvlm.csv")
+LVLM_PREDICTIONS_CSV = os.path.join("results", "predictions_lvlm.csv")
 
 # 输入类型映射和对应的JSON路径
 INPUT_CONFIG = {

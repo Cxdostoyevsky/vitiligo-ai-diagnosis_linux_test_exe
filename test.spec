@@ -7,18 +7,8 @@ datas = [('model_ckpt', 'model_ckpt')] + collect_data_files('transformers')
 
 # --- 新增: 更全面的隐藏导入列表，解决 "Unrecognized class" 问题 ---
 hiddenimports = [
+    # Existing
     'transformers',
-    'transformers.models.siglip',
-    'transformers.models.siglip.modeling_siglip',
-    'transformers.models.siglip.processing_siglip',
-    'transformers.models.siglip.image_processing_siglip',
-    'transformers.models.siglip.tokenization_siglip',
-    'transformers.models.siglip.configuration_siglip',
-    'transformers.models.auto.processing_auto',
-    'transformers.models.auto.modeling_auto',
-    'transformers.models.auto.image_processing_auto',
-    'transformers.models.auto.tokenization_auto',
-    'transformers.models.auto.configuration_auto',
     'safetensors',
     'safetensors.torch',
     'tokenizers',
@@ -29,7 +19,47 @@ hiddenimports = [
     'tokenizers.decoders',
     'tokenizers.normalizers',
     'pydantic',
-    'pydantic_core'
+    'pydantic_core',
+    
+    # For Siglip (already present, but good to keep track)
+    'transformers.models.siglip',
+    'transformers.models.siglip.modeling_siglip',
+    'transformers.models.siglip.processing_siglip',
+    'transformers.models.siglip.image_processing_siglip',
+    'transformers.models.siglip.tokenization_siglip',
+    'transformers.models.siglip.configuration_siglip',
+
+    # For Auto* classes
+    'transformers.models.auto.processing_auto',
+    'transformers.models.auto.modeling_auto',
+    'transformers.models.auto.image_processing_auto',
+    'transformers.models.auto.tokenization_auto',
+    'transformers.models.auto.configuration_auto',
+
+    # New for LVLM
+    'transformers.models.llama',
+    'transformers.models.llama.modeling_llama',
+    'transformers.models.llama.configuration_llama',
+    'transformers.models.qwen',
+    'transformers.models.qwen.modeling_qwen2', # Assuming Qwen2
+    'transformers.models.qwen.configuration_qwen2',
+    'transformers.models.phi',
+    'transformers.models.phi.modeling_phi',
+    'transformers.models.phi.configuration_phi',
+    'transformers.models.phi3',
+    'transformers.models.phi3.modeling_phi3',
+    'transformers.models.phi3.configuration_phi3',
+    'transformers.models.clip',
+    'transformers.models.clip.modeling_clip',
+    'transformers.models.clip.processing_clip',
+    'transformers.models.clip.image_processing_clip',
+    'transformers.models.clip.configuration_clip',
+    'transformers.models.bert',
+    'transformers.models.bert.modeling_bert',
+    'transformers.models.bert.tokenization_bert',
+    'transformers.models.bert.configuration_bert',
+    'monai',
+    'einops',
 ]
 
 a = Analysis(

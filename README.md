@@ -60,6 +60,15 @@ Open a terminal in your working directory and run the following command.
 **Example Usage:**
 
 ```bash
+文件夹目录为：
+test_dist/
+├── _internal/          #模型文件夹
+├── test               # 可执行文件
+
+进入可执行文件夹目录：test_dist
+cd /test_dist 
+
+批量测试文件: --data_path:测试数据路径  --result_path 存放结果的文件路径
 ./test --data_path data.csv --result_path result.csv
 ```
 

@@ -86,21 +86,62 @@ def load_test_data(processor=None, input_config=None, image_root_dir=None):
             
             test_samples[sample_id]["images"][input_type] = images
     
-    # # 第四步：验证完整性
-    # missing_in_types = {}
-    # for sample_id in ordered_ids:
-    #     for input_type in INPUT_CONFIG:
-    #         if input_type not in test_samples[sample_id]["images"]:
-    #             if input_type not in missing_in_types:
-    #                 missing_in_types[input_type] = []
-    #             missing_in_types[input_type].append(sample_id)
-    
-    # for input_type, samples in missing_in_types.items():
-    #     print(f"警告: {len(samples)} 个样本在 {input_type} 中缺失数据")
-    #     # 添加占位符
-    #     num_images = len(INPUT_CONFIG[input_type]["image_types"])
-    #     for sample_id in samples:
-    #         test_samples[sample_id]["images"][input_type] = [
-    #             torch.zeros((3, 512, 512)) for _ in range(num_images)]
             
     return ordered_ids, test_samples
+
+
+def load_single_test_sample(case_id, img_path_dict, processor):
+    """
+    根据给定的case_id和图像路径字典，为单个样本加载所有需要的图像组合。
+    先加载所有需要的图像，然后根据组合进行组装，避免重复加载。
+    直接返回一个可供InferenceSystem使用的test_samples字典。
+    """
+    test_sample = {
+        "id": case_id,
+        "images": {}
+    }
+
+    # 1. 收集所有不重复的有效图像路径并一次性加载
+    loaded_images = {}
+    unique_paths = set(p for p in img_path_dict.values() if p)
+    for img_path in unique_paths:
+        try:
+            img_tensor = load_single_image(img_path, processor)
+            loaded_images[img_path] = img_tensor
+        except FileNotFoundError:
+            # 如果文件找不到，用一个全黑的占位符代替
+            placeholder = torch.zeros((3, 512, 512))
+            loaded_images[img_path] = placeholder
+            print(f"警告: 图像文件未找到: {img_path}，已使用占位符代替。")
+
+    # 定义所有可能的图像组合
+    image_combinations = {
+        "oc": [img_path_dict.get("oc")],
+        "ow": [img_path_dict.get("ow")],
+        "oc_ec": [img_path_dict.get("oc"), img_path_dict.get("ec")],
+        "ow_ew": [img_path_dict.get("ow"), img_path_dict.get("ew")],
+        "oc_ow": [img_path_dict.get("oc"), img_path_dict.get("ow")],
+        "oc_ec_ow_ew": [
+            img_path_dict.get("oc"), img_path_dict.get("ec"),
+            img_path_dict.get("ow"), img_path_dict.get("ew")
+        ]
+    }
+    
+    # 3. 从已加载的图像中组装组合
+    for combo_name, img_paths in image_combinations.items():
+        images = []
+        # 过滤掉None的路径
+        valid_paths = [p for p in img_paths if p]
+        
+        if not valid_paths:
+            # print(f"警告: 样本 {case_id} 的组合 {combo_name} 缺少所有图像路径。")
+            continue
+
+        for img_path in valid_paths:
+            images.append(loaded_images[img_path])
+        
+        if images:
+            test_sample["images"][combo_name] = images
+            
+    # 返回一个包含单个样本的字典，键是case_id
+    return {case_id: test_sample}
